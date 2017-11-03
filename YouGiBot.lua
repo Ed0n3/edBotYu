@@ -1,14 +1,6 @@
---
--- Created by IntelliJ IDEA.
 -- Autor: Eduard Weber aka Ed0n3
--- Date: 02.11.2017
--- Time: 11:22
--- To change this template use File | Settings | File Templates.
---
 
-
---script global varss
-test = "a"
+--script global vars
 dir = scriptPath()
 foundDuelists = {}
 isDuelling = false
@@ -18,7 +10,6 @@ swipeTimes = 0
 face1 = Pattern("face1.png")
 backButton = Pattern("backbtn.png")
 itemOkButton = Pattern("item_ok.png")
-okButtonEndBattle = Pattern("okButtonEndBattle.png")
 nextButton = Pattern("nextButton.png")
 dialogOpened = Pattern("dialogOpened.png")
 autoDuelStartButton = Pattern("autoDuelDialog.png")
@@ -41,7 +32,6 @@ duelistWorldMid_1_Region = Region(20,1050,1040,400)
 duelistWorldBig_1_Region = Region(20,1200,1040,500)
 backbtn_region = Region(0, 1775, 210, 158)
 saveReplay_Region = Region(5,1500, 402, 150)
-okButtonEndBattle_Region = Region(464, 1785, 136, 88)
 initiatelink_region = Region(70, 1285, 696, 200)
 dialogOpened_Region = Region(401, 1310, 678, 266)
 itemOkButton_Region = Region(47, 641, 975, 624)
@@ -52,7 +42,7 @@ duelResults_Region = Region(27, 97, 259, 234)
 logButton_Region = Region(791, 1530, 183, 95)
 cardTrader_Region = Region(33, 79, 304, 96)
 
-
+setImmersiveMode(true)
 
 
 function searchForDuelists()
