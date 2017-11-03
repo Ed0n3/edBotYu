@@ -1,4 +1,4 @@
--- Autor: Eduard Weber aka Ed0n3
+-- Autor: Eduard Weber aka Ed0n3 / No0n3
 
 --script global vars
 dir = scriptPath()
