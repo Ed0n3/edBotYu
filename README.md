@@ -12,4 +12,4 @@ What it does:
   - PvP
   - farming legendary duelists (at the gate)
 
-Automated duels are going to be implemented eventually (it's kinda complicated).
+Automated duels are going to be implemented eventually (it's kinda complicated/slow).
