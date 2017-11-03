@@ -135,6 +135,10 @@ end
 
 function waitDuelling()
     local endBattle = true
+    local noDuelist = false
+    local itemCollected = false
+    local dialog = false
+
     if(isDuelling) then
         while (isDuelling == true) do
            if(logButton_Region:exists(logButton, 2)) then
@@ -156,6 +160,7 @@ function waitDuelling()
     end
 
     while (dialogOpened_Region:existsClick(dialogOpened, 2) == true) do --nothing
+        dialog = true
     end
 
     if (exists(vagaFriendList, 3)) then
@@ -166,6 +171,7 @@ function waitDuelling()
         end
         if(Region(500, 400, 500, 800):existsClick(setChallengeOkButton, 3) == true) then
             while (dialogOpened_Region:existsClick(dialogOpened, 2) == true) do --nothing
+                dialog = true
             end
         end
 
@@ -175,9 +181,16 @@ function waitDuelling()
 
     if(itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
         itemOkButton_Region:existsClick(itemOkButton, 3)
-        return 1
+        itemCollected = true
     end
 
+    if(closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
+        noDuelist = true
+    end
+
+    if (dialog == true or noDuelist == true or itemCollected == true) then
+       return 1
+    end
 
     return 0
 end
@@ -196,24 +209,14 @@ function whereIAM()
     end
 end
 
---[[function duelOrbsAvaible()
-    if(closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
-        return 0
-    elseif (noDuelist_Region:exists(noDuelist, 2)) then
-       return 0
-    end
-    return 1
-end ]]--
 
 function runBot()
     local iAmAt = whereIAM()
     local startD = 0
 
     if(iAmAt == "world") then
-       -- if(duelOrbsAvaible() == 1) then
-            searchForDuelists()
-            startD = startDuel()
-       -- end
+        searchForDuelists()
+        startD = startDuel()
     elseif (iAmAt == "dialog") then
         startD = startDuel()
     elseif(iAmAt == "endbattle") then
