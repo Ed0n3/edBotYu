@@ -26,6 +26,9 @@ cardTrader = Pattern("cardTrader.png")
 setChallengeButton = Pattern("setChallengeButton.png")
 setChallengeOkButton = Pattern("setChallengeOkButton.png")
 vagaFriendList = Pattern("vagaFriendList.png")
+closeBeaconButton = Pattern("closeBeaconButton.png")
+noDuelist = Pattern("noDuelist.png")
+
 
 duelistWorldSmall_1_Region = Region(20,900,1040,300)
 duelistWorldMid_1_Region = Region(20,1050,1040,400)
@@ -41,6 +44,9 @@ nextButton_Region =  Region(247, 1742, 278, 113)
 duelResults_Region = Region(27, 97, 259, 234)
 logButton_Region = Region(791, 1530, 183, 95)
 cardTrader_Region = Region(33, 79, 304, 96)
+closeBeaconButton_Region = Region(254, 1349, 460, 167)
+noDuelist_Region = Region(138, 60, 73, 110)
+
 
 setImmersiveMode(true)
 
@@ -165,6 +171,8 @@ function waitDuelling()
 
     end
 
+
+
     if(itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
         itemOkButton_Region:existsClick(itemOkButton, 3)
         return 1
@@ -188,13 +196,24 @@ function whereIAM()
     end
 end
 
+--[[function duelOrbsAvaible()
+    if(closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
+        return 0
+    elseif (noDuelist_Region:exists(noDuelist, 2)) then
+       return 0
+    end
+    return 1
+end ]]--
+
 function runBot()
     local iAmAt = whereIAM()
     local startD = 0
 
     if(iAmAt == "world") then
-        searchForDuelists()
-        startD = startDuel()
+       -- if(duelOrbsAvaible() == 1) then
+            searchForDuelists()
+            startD = startDuel()
+       -- end
     elseif (iAmAt == "dialog") then
         startD = startDuel()
     elseif(iAmAt == "endbattle") then
@@ -223,12 +242,7 @@ end
 
 
 function tryDebug()
-    isDuelling = false
-    --waitDuelling()
-    if (duelResults_Region:exists(duelResults, 3)) then
-        print("nigga")
-    end
-
+    --do something
 end
 
 --tryDebug()
