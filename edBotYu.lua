@@ -1,51 +1,14 @@
 -- Autor: Eduard Weber aka Ed0n3 / No0n3
 
---script global vars
+-- Script global vars
 dir = scriptPath()
 foundDuelists = {}
 isDuelling = false
 foundDuel = false
 swipeTimes = 0
 
-face1 = Pattern("face1.png")
-backButton = Pattern("backbtn.png")
-itemOkButton = Pattern("item_ok.png")
-nextButton = Pattern("nextButton.png")
-dialogOpened = Pattern("dialogOpened.png")
-autoDuelStartButton = Pattern("autoDuelDialog.png")
-duelistWorldMid_1 = Pattern("duelist_world_mid1.png")
-duelistWorldBig_1 = Pattern("duelist_world_big1.png")
-duelistWorldSmall_1 = Pattern("duelist_world_small1.png")
-duelistWorldSmall_2 = Pattern("duelist_world_small2.png")
-saveReplay = Pattern("saveReplayEndBattle.png")
-initiateLinkButton = Pattern("initiateLinkButton.png")
-worldScreenSettingsButton = Pattern("worldScreenSettingsButton.png")
-duelResults = Pattern("duelResults.png")
-logButton = Pattern("logButton.png")
-cardTrader = Pattern("cardTrader.png")
-setChallengeButton = Pattern("setChallengeButton.png")
-setChallengeOkButton = Pattern("setChallengeOkButton.png")
-vagaFriendList = Pattern("vagaFriendList.png")
-closeBeaconButton = Pattern("closeBeaconButton.png")
-noDuelist = Pattern("noDuelist.png")
-
-
-duelistWorldSmall_1_Region = Region(20,900,1040,300)
-duelistWorldMid_1_Region = Region(20,1050,1040,400)
-duelistWorldBig_1_Region = Region(20,1200,1040,500)
-backbtn_region = Region(0, 1775, 210, 158)
-saveReplay_Region = Region(5,1500, 402, 150)
-initiatelink_region = Region(70, 1285, 696, 200)
-dialogOpened_Region = Region(401, 1310, 678, 266)
-itemOkButton_Region = Region(47, 641, 975, 624)
-autoDuelStartButton_Region = Region(530, 1574, 546, 206)
-worldScreenSettingsButton_Region = Region(944, 216, 109, 121)
-nextButton_Region =  Region(247, 1742, 278, 113)
-duelResults_Region = Region(27, 97, 259, 234)
-logButton_Region = Region(791, 1530, 183, 95)
-cardTrader_Region = Region(33, 79, 304, 96)
-closeBeaconButton_Region = Region(254, 1349, 460, 167)
-noDuelist_Region = Region(138, 60, 73, 110)
+dofile(scriptPath() .. "images.lua")
+--dofile("")
 
 
 setImmersiveMode(true)
@@ -192,6 +155,10 @@ function waitDuelling()
        return 1
     end
 
+    if (worldScreenSettingsButton_Region:exists(worldScreenSettingsButton, 1)) then
+        return 1
+    end
+
     return 0
 end
 
@@ -228,7 +195,7 @@ function runBot()
     end
 
     if(startD == 0) then
-        toast("no duelist / item found")
+        print("no duelist / item found")
     elseif (startD == 2) then
         if (waitDuelling() == 1) then
             runBot()
@@ -241,6 +208,58 @@ function runBot()
 
 end
 
+function getAtkDuel()
+    local atk = numberOCRNoFindException(atk_region, "duel_")
+    --print("Atk: " .. atk)
+    return atk
+end
+
+function getAtkDuel()
+    local def = numberOCRNoFindException(def_region, "duel_")
+    --print("Atk: " .. atk)
+    return def
+end
+
+
+function readCardName()
+    --local alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' }
+    local alphabet = {'a','c','e','l','u','t'}
+    local name = ""
+    local found_alphabet = {}
+
+    for i,v in pairs(alphabet) do
+        local found = cardName_region:exists("duel_" .. alphabet[i] .. ".png", 0.1)
+        if(found) then
+            table.insert(found_alphabet, {v, found})
+        --else
+          --  cardName_region:exists("duel_" .. string.upper(alphabet[i]) .. ".png", 0.1)
+            --if(found) then
+              --  table.insert(found_alphabet, {v, found})
+            --end
+        end
+    end
+
+    for j=1, #found_alphabet do
+        for k=1, #found_alphabet do
+            if(found_alphabet[j][2]:getTarget().x < found_alphabet[k][2]:getTarget().x) then
+                local swap = found_alphabet[j][2]:getTarget().x
+                --found_alphabet[j][2].target.x = found_alphabet[k][2].target.x
+                --found_alphabet[k][2].target.x = swap
+                toast(found_alphabet[k][2].getTarget().x)
+            end
+
+        end
+
+    end
+
+    for i,v in ipairs(found_alphabet) do
+        name = name .. v[1]
+    end
+
+
+    print(name)
+
+end
 
 --X
 
@@ -250,4 +269,5 @@ end
 
 --tryDebug()
 runBot()
-
+--getAtkDuel()
+--readCardName()
