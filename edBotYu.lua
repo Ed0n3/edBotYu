@@ -1,5 +1,10 @@
 -- Autor: Eduard Weber aka Ed0n3 / No0n3
 
+
+--todo: Vagabond send challenge, read cardnames: move position of reading after char found
+--todo: 
+
+
 -- Script global vars
 dir = scriptPath()
 foundDuelists = {}
@@ -230,7 +235,7 @@ function readCardName()
     for i,v in pairs(alphabet) do
         local found = cardName_region:exists("duel_" .. alphabet[i] .. ".png", 0.1)
         if(found) then
-            table.insert(found_alphabet, {v, found})
+            table.insert(found_alphabet, {v, found:getTarget().x})
         --else
           --  cardName_region:exists("duel_" .. string.upper(alphabet[i]) .. ".png", 0.1)
             --if(found) then
@@ -239,13 +244,14 @@ function readCardName()
         end
     end
 
-    for j=1, #found_alphabet do
-        for k=1, #found_alphabet do
-            if(found_alphabet[j][2]:getTarget().x < found_alphabet[k][2]:getTarget().x) then
-                local swap = found_alphabet[j][2]:getTarget().x
-                --found_alphabet[j][2].target.x = found_alphabet[k][2].target.x
-                --found_alphabet[k][2].target.x = swap
-                toast(found_alphabet[k][2].getTarget().x)
+    for j, r in ipairs(found_alphabet) do
+        print(r[2])
+        for k, s in ipairs(found_alphabet) do
+            if(r[2] > s[2] ) then
+            --if(found_alphabet[j][2]:getTarget().x > found_alphabet[k][2]:getTarget().x) then
+                local swap = found_alphabet[j]
+                found_alphabet[j] = found_alphabet[k]
+                found_alphabet[j] = swap
             end
 
         end
@@ -268,6 +274,6 @@ function tryDebug()
 end
 
 --tryDebug()
+--readCardName()
 runBot()
 --getAtkDuel()
---readCardName()
