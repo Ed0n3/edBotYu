@@ -22,22 +22,22 @@ setImmersiveMode(true)
 function searchForDuelists()
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
 
-    for k,v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
-            table.insert(foundDuelists, v)
-    end
-
-    for k,v in ipairs(listToTable(duelistWorldMid_1_Region:findAllNoFindException(duelistWorldMid_1))) do
+    for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
         table.insert(foundDuelists, v)
     end
 
-    for k,v in ipairs(listToTable(duelistWorldBig_1_Region:findAllNoFindException(duelistWorldBig_1))) do
+    for k, v in ipairs(listToTable(duelistWorldMid_1_Region:findAllNoFindException(duelistWorldMid_1))) do
         table.insert(foundDuelists, v)
     end
 
-    if(#foundDuelists == 1 and swipeTimes < 4) then --card trader found
+    for k, v in ipairs(listToTable(duelistWorldBig_1_Region:findAllNoFindException(duelistWorldBig_1))) do
+        table.insert(foundDuelists, v)
+    end
+
+    if (#foundDuelists == 1 and swipeTimes < 4) then --card trader found
         local removed = false
         for k, v in ipairs(foundDuelists) do
-            if(v:getY() >= 1368 and v:getY() <= 1376 and v:getX() >= 566 and v:getX() <= 574) then
+            if (v:getY() >= 1368 and v:getY() <= 1376 and v:getX() >= 566 and v:getX() <= 574) then
                 swipe(Location(100, 800), Location(800, 800))
                 swipeTimes = swipeTimes + 1
                 table.remove(foundDuelists, k)
@@ -45,13 +45,13 @@ function searchForDuelists()
                 break
             end
         end
-        if(removed == true) then
+        if (removed == true) then
             searchForDuelists()
         end
     end
 
 
-    if(#foundDuelists == 0 and swipeTimes < 4) then
+    if (#foundDuelists == 0 and swipeTimes < 4) then
         swipe(Location(100, 800), Location(800, 800))
         swipeTimes = swipeTimes + 1
         searchForDuelists()
@@ -65,35 +65,35 @@ function searchForDuelists()
             end
         end
     end
-    ]]--
+    ]] --
 end
 
 function startDuel()
     local isDuelist = false
 
     for k, v in ipairs(foundDuelists) do
-        if(v:getY() ~= 1372 and v:getX() ~= 570) then
-            click(Location(v:getX()-15, v:getY()+15), 1)
+        if (v:getY() ~= 1372 and v:getX() ~= 570) then
+            click(Location(v:getX() - 15, v:getY() + 15), 1)
             table.remove(foundDuelists, k)
             break
         end
-       -- print(v:getX() .. " - " .. v:getY())
+        -- print(v:getX() .. " - " .. v:getY())
         --if(not cardTrader_Region:exists(cardTrader, 5)) then
     end
-    while dialogOpened_Region:existsClick(dialogOpened, 3) == true do
+    while dialogOpened_Region:existsClick(dialogOpened, 1) == true do
         isDuelist = true
-        if (autoDuelStartButton_Region:existsClick(autoDuelStartButton, 3) == true) then
+        if (autoDuelStartButton_Region:existsClick(autoDuelStartButton, 1) == true) then
             isDuelling = true
             return 2 --starting duel
         end
     end
 
-    if (itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
+    if (itemOkButton_Region:existsClick(itemOkButton, 1) == true) then
         return 3 -- got item
     end
 
 
-    if(isDuelist == true and autoDuelStartButton_Region:existsClick(autoDuelStartButton, 3) == true) then
+    if (isDuelist == true and autoDuelStartButton_Region:existsClick(autoDuelStartButton, 13) == true) then
         isDuelling = true
         return 2 --starting duel
     end
@@ -107,57 +107,56 @@ function waitDuelling()
     local itemCollected = false
     local dialog = false
 
-    if(isDuelling) then
+    if (isDuelling) then
         while (isDuelling == true) do
-           if(logButton_Region:exists(logButton, 2)) then
-               click(Location(542, 1759))
-               isDuelling = false
-               endBattle = true
-           end
+            if (logButton_Region:exists(logButton, 2)) then
+                click(Location(542, 1759))
+                isDuelling = false
+                endBattle = true
+            end
         end
     end
 
     while (endBattle == true) do
-        if(duelResults_Region:exists(duelResults, 3)) then
+        if (duelResults_Region:exists(duelResults, 1)) then
             click(Location(542, 1759))
         end
 
-        if(dialogOpened_Region:existsClick(dialogOpened, 3) == true) then
+        if (dialogOpened_Region:existsClick(dialogOpened, 1) == true) then
             endBattle = false
         end
     end
 
-    while (dialogOpened_Region:existsClick(dialogOpened, 2) == true) do --nothing
+    while (dialogOpened_Region:existsClick(dialogOpened, 1) == true) do --nothing
         dialog = true
     end
 
     if (exists(vagaFriendList, 3)) then
         click(Location(537, 852))
-        if(existsClick(setChallengeButton, 3)) then
-            swipe(Location(560, 1663),Location(560,1033))
-            click(Location(511,1180))
+        if (existsClick(setChallengeButton, 3)) then
+            swipe(Location(560, 1663), Location(560, 1033))
+            click(Location(511, 1180))
         end
-        if(Region(500, 400, 500, 800):existsClick(setChallengeOkButton, 3) == true) then
+        if (Region(500, 400, 500, 800):existsClick(setChallengeOkButton, 3) == true) then
             while (dialogOpened_Region:existsClick(dialogOpened, 2) == true) do --nothing
                 dialog = true
             end
         end
-
     end
 
 
 
-    if(itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
+    if (itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
         itemOkButton_Region:existsClick(itemOkButton, 3)
         itemCollected = true
     end
 
-    if(closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
+    if (closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
         noDuelist = true
     end
 
     if (dialog == true or noDuelist == true or itemCollected == true) then
-       return 1
+        return 1
     end
 
     if (worldScreenSettingsButton_Region:exists(worldScreenSettingsButton, 1)) then
@@ -168,13 +167,13 @@ function waitDuelling()
 end
 
 function whereIAM()
-    if (worldScreenSettingsButton_Region:exists(worldScreenSettingsButton, 1))then
+    if (worldScreenSettingsButton_Region:exists(worldScreenSettingsButton, 0.5)) then
         return "world"
-    elseif(autoDuelStartButton_Region:exists(autoDuelStartButton, 1)) then
+    elseif (autoDuelStartButton_Region:exists(autoDuelStartButton, 0.5)) then
         return "dialog"
-    elseif(dialogOpened_Region:exists(dialogOpened, 1)) then
+    elseif (dialogOpened_Region:exists(dialogOpened, 0.5)) then
         return "dialog"
-    elseif (logButton_Region:exists(logButton, 1)) then
+    elseif (logButton_Region:exists(logButton, 0.5)) then
         return "endbattle"
     else
         return "unknown"
@@ -186,20 +185,20 @@ function runBot()
     local iAmAt = whereIAM()
     local startD = 0
 
-    if(iAmAt == "world") then
+    if (iAmAt == "world") then
         searchForDuelists()
         startD = startDuel()
     elseif (iAmAt == "dialog") then
         startD = startDuel()
-    elseif(iAmAt == "endbattle") then
-        if(waitDuelling() == 1) then
+    elseif (iAmAt == "endbattle") then
+        if (waitDuelling() == 1) then
             runBot()
         end
     elseif (iAmAt == "unknown") then
         print("go back to world and start the bot")
     end
 
-    if(startD == 0) then
+    if (startD == 0) then
         print("no duelist / item found")
     elseif (startD == 2) then
         if (waitDuelling() == 1) then
@@ -210,7 +209,6 @@ function runBot()
     elseif (startD == 5) then
         runBot()
     end
-
 end
 
 function getAtkDuel()
@@ -227,44 +225,73 @@ end
 
 
 function readCardName()
-    --local alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' }
-    local alphabet = {'a','c','e','l','u','t'}
+    Settings:set("MinSimilarity", 0.85)
+    local alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' }
+    --local alphabet = { 'a', 'c', 'e', 'l', 'u', 't' }
+    --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l t
     local name = ""
     local found_alphabet = {}
 
-    for i,v in pairs(alphabet) do
-        local found = cardName_region:exists("duel_" .. alphabet[i] .. ".png", 0.1)
-        if(found) then
-            table.insert(found_alphabet, {v, found:getTarget().x})
-        --else
-          --  cardName_region:exists("duel_" .. string.upper(alphabet[i]) .. ".png", 0.1)
-            --if(found) then
-              --  table.insert(found_alphabet, {v, found})
-            --end
+    local tempRegion = Region(72, 448, 60, 60)
+    local cursor = 72
+    local cursor_loop = 0
+    local tmp_cursor = 0
+
+    while (cursor < 200) do
+        tempRegion:highlight()
+        for i, v in ipairs(alphabet) do
+            local found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0.01)
+
+            if (found) then
+                --print(found)
+                table.insert(found_alphabet, { v, found:getX() })
+                cursor = cursor + found:getW()
+                break
+            else
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
+                if (found) then
+                    table.insert(found_alphabet, { v, found:getX() })
+                    cursor = cursor + found:getW()
+                    break
+                end
+            end
         end
+
+        --cursor = cursor + 25
+        tempRegion:highlightOff()
+        if(tmp_cursor == cursor) then
+           cursor_loop = cursor_loop + 1
+        else
+            cursor_loop = 0
+        end
+
+        if(cursor_loop>1) then
+           cursor = cursor + 25
+        end
+
+        tmp_cursor = cursor
+        tempRegion = Region(cursor, tempRegion:getY(), tempRegion:getW(), tempRegion:getH())
     end
 
-    for j, r in ipairs(found_alphabet) do
-        print(r[2])
+    --[[for j, r in ipairs(found_alphabet) do
+        --print(r[2])
         for k, s in ipairs(found_alphabet) do
-            if(r[2] > s[2] ) then
-            --if(found_alphabet[j][2]:getTarget().x > found_alphabet[k][2]:getTarget().x) then
+            if (r[2] > s[2]) then
+
+                --if(found_alphabet[j][2]:getTarget().x > found_alphabet[k][2]:getTarget().x) then
                 local swap = found_alphabet[j]
                 found_alphabet[j] = found_alphabet[k]
                 found_alphabet[j] = swap
             end
-
         end
+    end]] --
 
-    end
-
-    for i,v in ipairs(found_alphabet) do
+    for i, v in ipairs(found_alphabet) do
         name = name .. v[1]
     end
 
 
     print(name)
-
 end
 
 --X
