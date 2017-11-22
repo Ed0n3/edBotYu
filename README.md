@@ -1,7 +1,7 @@
 # edBotYu
 AnkuLua Yu-Gi-Oh Bot
 
-Hello There, this is a simple Yu-Gi-Oh Duel Links Bot for AnkuLua on Android I made.
+Hello there, this is a simple Yu-Gi-Oh Duel Links bot for AnkuLua on Android I made.
 
 What it does:
   - farm all Duelists in Duel Worlds
