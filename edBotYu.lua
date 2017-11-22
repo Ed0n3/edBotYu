@@ -1,8 +1,7 @@
 -- Autor: Eduard Weber aka Ed0n3 / No0n3
 
 
---todo: Vagabond send challenge, read cardnames: move position of reading after char found
---todo: 
+--todo: complete the completeALphabet
 
 
 -- Script global vars
@@ -18,11 +17,16 @@ dofile(scriptPath() .. "images.lua")
 
 setImmersiveMode(true)
 
+completeAlphabet = {{'a', 'A', '30', ''},{'b', 'B', '', ''},{'c', 'C', '', ''},{'d', 'D', '', ''},{'e', 'E', '', ''},{'f', 'F', '', ''},{'g', 'G', '', ''},{'h', 'H', '', ''},{'i', 'I', '', ''},{'j', 'J', '', ''},{'k', 'K', '', ''},{'l', 'L', '', ''},{'m', 'M', '', ''},{'n', 'N', '', ''},{'o', 'O', '', ''},{'p', 'P', '', ''},{'q', 'Q', '', ''},{'r', 'R', '20', '42'},{'s', 'S', '', ''},{'t', 'T', '', ''},{'u', 'U', '', ''},{'v', 'V', '', ''},{'w', 'W', '', ''},{'x', 'X', '', ''},{'y', 'Y', '', ''},{'z', 'Z', '', ''} }
 
 function searchForDuelists()
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
 
     for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
+        table.insert(foundDuelists, v)
+    end
+
+    for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_3))) do
         table.insert(foundDuelists, v)
     end
 
@@ -224,54 +228,91 @@ function getAtkDuel()
 end
 
 
+function changeCursor(charackter, big)
+
+    for i,v in ipairs(completeAlphabet) do
+        if charackter == 'w' and big == true then
+            return 0, 60
+        elseif charackter == 'm' then
+            return 0, 60
+        elseif charackter == 'i' then
+            return 0, 20
+        elseif charackter == 'l' then
+            return 0, 20
+        else
+            return 0, 40
+        end
+    end
+end
+
+
 function readCardName()
-    Settings:set("MinSimilarity", 0.85)
-    local alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' }
+    Settings:set("MinSimilarity", 0.95)
+    local alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }
     --local alphabet = { 'a', 'c', 'e', 'l', 'u', 't' }
     --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l t
     local name = ""
     local found_alphabet = {}
 
-    local tempRegion = Region(72, 448, 60, 60)
-    local cursor = 72
+    local cursor = 75
     local cursor_loop = 0
     local tmp_cursor = 0
+    local cursor_width = 60
+    local firstChar = true
+    local nextChar = false
 
-    while (cursor < 200) do
+
+    local tempRegion = Region(cursor, 448, cursor_width, 60)
+
+    while (cursor < 250) do
         tempRegion:highlight()
         for i, v in ipairs(alphabet) do
-            local found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0.01)
+            local tmpC
+            local found
 
-            if (found) then
+            if firstChar==true then tmpC, cursor_width = changeCursorWidth(alphabet[i], true)
+            else tmpC, cursor_width = changeCursorWidth(alphabet[i], false) end
+
+            if (firstChar == false and nextChar == true) then cursor = cursor + tmpC end
+
+            if (firstChar == false) then
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0.01)
+            else
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
+            end
+
+            if (found and firstChar == true) then
                 --print(found)
+                firstChar = false
+                cursor_width = 40
                 table.insert(found_alphabet, { v, found:getX() })
                 cursor = cursor + found:getW()
                 break
-            else
-                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
-                if (found) then
-                    table.insert(found_alphabet, { v, found:getX() })
-                    cursor = cursor + found:getW()
-                    break
-                end
+            elseif (found) then
+                --found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
+                table.insert(found_alphabet, { v, found:getX() })
+                cursor = cursor + found:getW()
+                break
             end
         end
 
+
         --cursor = cursor + 25
         tempRegion:highlightOff()
-        if(tmp_cursor == cursor) then
-           cursor_loop = cursor_loop + 1
+        if (tmp_cursor == cursor) then
+            cursor_loop = cursor_loop + 1
         else
             cursor_loop = 0
         end
 
-        if(cursor_loop>1) then
-           cursor = cursor + 25
+        if (cursor_loop > 1) then
+            cursor = cursor + 25
         end
 
         tmp_cursor = cursor
-        tempRegion = Region(cursor, tempRegion:getY(), tempRegion:getW(), tempRegion:getH())
+        tempRegion = Region(cursor, tempRegion:getY(), cursor_width, tempRegion:getH())
     end
+
 
     --[[for j, r in ipairs(found_alphabet) do
         --print(r[2])
