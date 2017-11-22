@@ -13,20 +13,17 @@ swipeTimes = 0
 
 dofile(scriptPath() .. "images.lua")
 --dofile("")
-
+Settings:set("MinSimilarity", 0.8)
 
 setImmersiveMode(true)
 
 completeAlphabet = {{'a', 'A', '30', ''},{'b', 'B', '', ''},{'c', 'C', '', ''},{'d', 'D', '', ''},{'e', 'E', '', ''},{'f', 'F', '', ''},{'g', 'G', '', ''},{'h', 'H', '', ''},{'i', 'I', '', ''},{'j', 'J', '', ''},{'k', 'K', '', ''},{'l', 'L', '', ''},{'m', 'M', '', ''},{'n', 'N', '', ''},{'o', 'O', '', ''},{'p', 'P', '', ''},{'q', 'Q', '', ''},{'r', 'R', '20', '42'},{'s', 'S', '', ''},{'t', 'T', '', ''},{'u', 'U', '', ''},{'v', 'V', '', ''},{'w', 'W', '', ''},{'x', 'X', '', ''},{'y', 'Y', '', ''},{'z', 'Z', '', ''} }
 
 function searchForDuelists()
+    Settings:set("MinSimilarity", 0.9)
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
 
     for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
-        table.insert(foundDuelists, v)
-    end
-
-    for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_3))) do
         table.insert(foundDuelists, v)
     end
 
@@ -39,6 +36,7 @@ function searchForDuelists()
     end
 
     if (#foundDuelists == 1 and swipeTimes < 4) then --card trader found
+        toast("CardTrader found")
         local removed = false
         for k, v in ipairs(foundDuelists) do
             if (v:getY() >= 1368 and v:getY() <= 1376 and v:getX() >= 566 and v:getX() <= 574) then
@@ -70,6 +68,7 @@ function searchForDuelists()
         end
     end
     ]] --
+    Settings:set("MinSimilarity", 0.8)
 end
 
 function startDuel()
