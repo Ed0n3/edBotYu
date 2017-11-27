@@ -1,7 +1,7 @@
 -- Autor: Eduard Weber aka Ed0n3 / No0n3
 
 
---todo: complete the completeALphabet
+
 
 
 -- Script global vars
@@ -17,16 +17,12 @@ dofile(scriptPath() .. "images.lua")
 
 setImmersiveMode(true)
 
-completeAlphabet = {{'a', 'A', '30', ''},{'b', 'B', '', ''},{'c', 'C', '', ''},{'d', 'D', '', ''},{'e', 'E', '', ''},{'f', 'F', '', ''},{'g', 'G', '', ''},{'h', 'H', '', ''},{'i', 'I', '', ''},{'j', 'J', '', ''},{'k', 'K', '', ''},{'l', 'L', '', ''},{'m', 'M', '', ''},{'n', 'N', '', ''},{'o', 'O', '', ''},{'p', 'P', '', ''},{'q', 'Q', '', ''},{'r', 'R', '20', '42'},{'s', 'S', '', ''},{'t', 'T', '', ''},{'u', 'U', '', ''},{'v', 'V', '', ''},{'w', 'W', '', ''},{'x', 'X', '', ''},{'y', 'Y', '', ''},{'z', 'Z', '', ''} }
+completeAlphabet = { { 'a', 'A', '30', '40' }, { 'b', 'B', '30', '40' }, { 'c', 'C', '30', '40' }, { 'd', 'D', '30', '40' }, { 'e', 'E', '30', '40' }, { 'f', 'F', '20', '40' }, { 'g', 'G', '30', '40' }, { 'h', 'H', '30', '40' }, { 'i', 'I', '20', '30' }, { 'j', 'J', '30', '40' }, { 'k', 'K', '30', '40' }, { 'l', 'L', '20', '40' }, { 'm', 'M', '50', '60' }, { 'n', 'N', '30', '40' }, { 'o', 'O', '30', '45' }, { 'p', 'P', '30', '40' }, { 'q', 'Q', '30', '50' }, { 'r', 'R', '30', '40' }, { 's', 'S', '30', '40' }, { 't', 'T', '20', '40' }, { 'u', 'U', '30', '40' }, { 'v', 'V', '40', '40' }, { 'w', 'W', '50', '60' }, { 'x', 'X', '30', '45' }, { 'y', 'Y', '30', '40' }, { 'z', 'Z', '30', '40' } }
 
 function searchForDuelists()
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
 
     for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
-        table.insert(foundDuelists, v)
-    end
-
-    for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_3))) do
         table.insert(foundDuelists, v)
     end
 
@@ -228,38 +224,30 @@ function getAtkDuel()
 end
 
 
-function changeCursor(charackter, big)
-
-    for i,v in ipairs(completeAlphabet) do
-        if charackter == 'w' and big == true then
-            return 0, 60
-        elseif charackter == 'm' then
-            return 0, 60
-        elseif charackter == 'i' then
-            return 0, 20
-        elseif charackter == 'l' then
-            return 0, 20
-        else
-            return 0, 40
+function changeCursor(charackter)
+    for i, v in ipairs(completeAlphabet) do
+        if charackter == v[2] then
+            return 0, v[4]
+        elseif charackter == v[1] then
+            return 0, v[3]
         end
     end
+    return 0, 40
 end
 
 
 function readCardName()
-    Settings:set("MinSimilarity", 0.95)
+    Settings:set("MinSimilarity", 0.90)
     local alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }
     --local alphabet = { 'a', 'c', 'e', 'l', 'u', 't' }
-    --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l t
-    local name = ""
+    --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l
+    local name = "-- "
     local found_alphabet = {}
 
-    local cursor = 75
+    local tempRegion = Region(72, 448, 60, 60)
+    local cursor = 72
     local cursor_loop = 0
     local tmp_cursor = 0
-    local cursor_width = 60
-    local firstChar = true
-    local nextChar = false
 
 
     local tempRegion = Region(cursor, 448, cursor_width, 60)
@@ -296,7 +284,6 @@ function readCardName()
             end
         end
 
-
         --cursor = cursor + 25
         tempRegion:highlightOff()
         if (tmp_cursor == cursor) then
@@ -312,7 +299,6 @@ function readCardName()
         tmp_cursor = cursor
         tempRegion = Region(cursor, tempRegion:getY(), cursor_width, tempRegion:getH())
     end
-
 
     --[[for j, r in ipairs(found_alphabet) do
         --print(r[2])
