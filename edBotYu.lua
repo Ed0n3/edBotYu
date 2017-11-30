@@ -17,23 +17,23 @@ dofile(scriptPath() .. "images.lua")
 
 setImmersiveMode(true)
 
-completeAlphabet = { { 'a', 'A', '30', '40' }, { 'b', 'B', '30', '40' }, { 'c', 'C', '30', '40' }, { 'd', 'D', '30', '40' }, { 'e', 'E', '30', '40' }, { 'f', 'F', '20', '40' }, { 'g', 'G', '30', '40' }, { 'h', 'H', '30', '40' }, { 'i', 'I', '20', '30' }, { 'j', 'J', '30', '40' }, { 'k', 'K', '30', '40' }, { 'l', 'L', '20', '40' }, { 'm', 'M', '50', '60' }, { 'n', 'N', '30', '40' }, { 'o', 'O', '30', '45' }, { 'p', 'P', '30', '40' }, { 'q', 'Q', '30', '50' }, { 'r', 'R', '30', '40' }, { 's', 'S', '30', '40' }, { 't', 'T', '20', '40' }, { 'u', 'U', '30', '40' }, { 'v', 'V', '40', '40' }, { 'w', 'W', '50', '60' }, { 'x', 'X', '30', '45' }, { 'y', 'Y', '30', '40' }, { 'z', 'Z', '30', '40' } }
+completeAlphabet = { { 'a', 'A', '36', '52' }, { 'b', 'B', '40', '50' }, { 'c', 'C', '30', '50' }, { 'd', 'D', '30', '40' }, { 'e', 'E', '32', '40' }, { 'f', 'F', '24', '46' }, { 'g', 'G', '40', '50' }, { 'h', 'H', '30', '50' }, { 'i', 'I', '12', '20' }, { 'j', 'J', '30', '50' }, { 'k', 'K', '40', '50' }, { 'l', 'L', '14', '40' }, { 'm', 'M', '44', '60' }, { 'n', 'N', '32', '50' }, { 'o', 'O', '32', '50' }, { 'p', 'P', '32', '36' }, { 'q', 'Q', '45', '50' }, { 'r', 'R', '20', '50' }, { 's', 'S', '35', '50' }, { 't', 'T', '20', '50' }, { 'u', 'U', '40', '50' }, { 'v', 'V', '32', '50' }, { 'w', 'W', '36', '52' }, { 'x', 'X', '40', '45' }, { 'y', 'Y', '40', '50' }, { 'z', 'Z', '40', '50' } }
 
 function searchForDuelists()
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
-
+    
     for k, v in ipairs(listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_2))) do
         table.insert(foundDuelists, v)
     end
-
+    
     for k, v in ipairs(listToTable(duelistWorldMid_1_Region:findAllNoFindException(duelistWorldMid_1))) do
         table.insert(foundDuelists, v)
     end
-
+    
     for k, v in ipairs(listToTable(duelistWorldBig_1_Region:findAllNoFindException(duelistWorldBig_1))) do
         table.insert(foundDuelists, v)
     end
-
+    
     if (#foundDuelists == 1 and swipeTimes < 4) then --card trader found
         local removed = false
         for k, v in ipairs(foundDuelists) do
@@ -49,8 +49,8 @@ function searchForDuelists()
             searchForDuelists()
         end
     end
-
-
+    
+    
     if (#foundDuelists == 0 and swipeTimes < 4) then
         swipe(Location(100, 800), Location(800, 800))
         swipeTimes = swipeTimes + 1
@@ -70,7 +70,7 @@ end
 
 function startDuel()
     local isDuelist = false
-
+    
     for k, v in ipairs(foundDuelists) do
         if (v:getY() ~= 1372 and v:getX() ~= 570) then
             click(Location(v:getX() - 15, v:getY() + 15), 1)
@@ -87,17 +87,17 @@ function startDuel()
             return 2 --starting duel
         end
     end
-
+    
     if (itemOkButton_Region:existsClick(itemOkButton, 1) == true) then
         return 3 -- got item
     end
-
-
+    
+    
     if (isDuelist == true and autoDuelStartButton_Region:existsClick(autoDuelStartButton, 13) == true) then
         isDuelling = true
         return 2 --starting duel
     end
-
+    
     return 0 --cant start
 end
 
@@ -106,7 +106,7 @@ function waitDuelling()
     local noDuelist = false
     local itemCollected = false
     local dialog = false
-
+    
     if (isDuelling) then
         while (isDuelling == true) do
             if (logButton_Region:exists(logButton, 2)) then
@@ -116,21 +116,21 @@ function waitDuelling()
             end
         end
     end
-
+    
     while (endBattle == true) do
         if (duelResults_Region:exists(duelResults, 1)) then
             click(Location(542, 1759))
         end
-
+        
         if (dialogOpened_Region:existsClick(dialogOpened, 1) == true) then
             endBattle = false
         end
     end
-
+    
     while (dialogOpened_Region:existsClick(dialogOpened, 1) == true) do --nothing
         dialog = true
     end
-
+    
     if (exists(vagaFriendList, 3)) then
         click(Location(537, 852))
         if (existsClick(setChallengeButton, 3)) then
@@ -143,26 +143,26 @@ function waitDuelling()
             end
         end
     end
-
-
-
+    
+    
+    
     if (itemOkButton_Region:existsClick(itemOkButton, 3) == true) then
         itemOkButton_Region:existsClick(itemOkButton, 3)
         itemCollected = true
     end
-
+    
     if (closeBeaconButton_Region:existsClick(closeBeaconButton, 3) == true) then
         noDuelist = true
     end
-
+    
     if (dialog == true or noDuelist == true or itemCollected == true) then
         return 1
     end
-
+    
     if (worldScreenSettingsButton_Region:exists(worldScreenSettingsButton, 1)) then
         return 1
     end
-
+    
     return 0
 end
 
@@ -184,7 +184,7 @@ end
 function runBot()
     local iAmAt = whereIAM()
     local startD = 0
-
+    
     if (iAmAt == "world") then
         searchForDuelists()
         startD = startDuel()
@@ -197,7 +197,7 @@ function runBot()
     elseif (iAmAt == "unknown") then
         print("go back to world and start the bot")
     end
-
+    
     if (startD == 0) then
         print("no duelist / item found")
     elseif (startD == 2) then
@@ -227,79 +227,177 @@ end
 function changeCursor(charackter)
     for i, v in ipairs(completeAlphabet) do
         if charackter == v[2] then
-            return 0, v[4]
+            if (charackter == 'W') then
+                return 0.7, tonumber(v[4])
+            elseif (charackter == 'M') then
+                return 0.8, tonumber(v[4])
+            end
+            return 0.92, tonumber(v[4])
         elseif charackter == v[1] then
-            return 0, v[3]
+            if (charackter == 'l') then
+                return 0.99, tonumber(v[3])
+            elseif (charackter == 'c') then
+                return 0.95, tonumber(v[3])
+            elseif (charackter == 'a' or charackter == 'o' or charackter == 'y') then
+                return 0.9, tonumber(v[3])
+            elseif (charackter == 'd' or charackter == 'm' or charackter == 'w') then
+                return 0.7, tonumber(v[3])
+            elseif (charackter == 'h' or charackter == 'i') then
+                return 0.85, tonumber(v[3])
+            end
+            return 0.92, tonumber(v[3])
         end
     end
-    return 0, 40
 end
 
 
 function readCardName()
-    Settings:set("MinSimilarity", 0.90)
-    local alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }
+    Settings:set("MinSimilarity", 0.92)
+    local alphabet = { 'a', 'b', 'd', 'e', 'g', 'h', 'k', 'r', 'm', 'n', 'o', 'c', 'p', 'q', 's', 'u', 'y', 'v', 'w', 'x', 'z', 'f', 't', 'i', 'l', 'j' }
     --local alphabet = { 'a', 'c', 'e', 'l', 'u', 't' }
     --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l
     local name = "-- "
     local found_alphabet = {}
-
-    local tempRegion = Region(72, 448, 60, 60)
-    local cursor = 72
+    
+    local cursor = 73
     local cursor_loop = 0
     local tmp_cursor = 0
-
-
-    local tempRegion = Region(cursor, 448, cursor_width, 60)
-
-    while (cursor < 250) do
-        tempRegion:highlight()
+    local cursor_width = 20
+    local notFoundLoops = 0
+    local notFoundLoops2 = 0
+    local lastFound
+    local moveCursor = false
+    usePreviousSnap(false)
+    
+    local tempRegion = Region(cursor, 442, cursor_width, 70)
+    local firstChar = true
+    
+    while (cursor <= 500) do
+        local highlightReg = tempRegion
+        highlightReg:highlight()
+        
         for i, v in ipairs(alphabet) do
-            local tmpC
+            local sim = 0.9
             local found
-
-            if firstChar==true then tmpC, cursor_width = changeCursorWidth(alphabet[i], true)
-            else tmpC, cursor_width = changeCursorWidth(alphabet[i], false) end
-
-            if (firstChar == false and nextChar == true) then cursor = cursor + tmpC end
-
-            if (firstChar == false) then
-                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0.01)
-            else
-                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
+    
+            --if firstChar == true then
+    
+            Settings:set("MinSimilarity", sim)
+            sim, cursor_width = changeCursor(alphabet[i])
+            tempRegion = Region(cursor, 442, cursor_width, 70)
+            --tempRegion:highlight()
+    
+            --[[else
+                tmpC, cursor_width = changeCursor(alphabet[i])
+                tempRegion = Region(cursor, 448, cursor_width, 60)
+                --tempRegion:highlight()
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0)
+            end]] --
+    
+    
+    
+            if (firstChar == false) then --and firstChar == true) then
+                --firstChar = false
+                sim, cursor_width = changeCursor(alphabet[i])
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0)
+                if (found) then
+                    table.insert(found_alphabet, { v, found:getX() })
+                    if (lastFound and (found:getX() <= lastFound:getX() + 5 and found:getX() >= lastFound:getX() - 5)) then
+                        table.remove(found_alphabet, #found_alphabet)
+                        cursor = found:getX() + found:getW() - 4
+                        break
+                    end
+                    cursor = found:getX() + found:getW() - 4
+                end
+        
+                --[[elseif (found) then
+                    
+                    table.insert(found_alphabet, { v, found:getX() })
+                    if (lastFound and found:getX() == lastFound:getX()) then
+                        table.remove(found_alphabet, #found_alphabet)
+                    end
+                    cursor = cursor + cursor_width / 2]] --
+            elseif (firstChar == true) then
+                sim, cursor_width = changeCursor(string.upper(alphabet[i]))
+                tempRegion = Region(cursor, 442, cursor_width, 70)
+                found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0)
+                usePreviousSnap(true)
+                if (found) then
+                    firstChar = false
+                    --table.insert(found_alphabet, { ' ', 0 })
+                    table.insert(found_alphabet, { string.upper(v), found:getX() })
+                    if (lastFound and (found:getX() <= lastFound:getX() + 5 and found:getX() >= lastFound:getX() - 5)) then
+                        table.remove(found_alphabet, #found_alphabet)
+                        cursor = found:getX() + found:getW() - 4
+                        break
+                    end
+                    cursor = found:getX() + found:getW() - 4
+                else
+                    sim, cursor_width = changeCursor(alphabet[i])
+                    found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0)
+                    if (found) then
+                        firstChar = false
+                        table.insert(found_alphabet, { v, found:getX() })
+                        if (lastFound and (found:getX() <= lastFound:getX() + 5 and found:getX() >= lastFound:getX() - 5)) then
+                            table.remove(found_alphabet, #found_alphabet)
+                            cursor = found:getX() + found:getW() - 4
+                            break
+                        end
+                        --cursor = cursor + cursor_width / 2
+                        cursor = found:getX() + found:getW() - 4
+                    end
+                end
             end
-
-            if (found and firstChar == true) then
-                --print(found)
-                firstChar = false
-                cursor_width = 40
-                table.insert(found_alphabet, { v, found:getX() })
-                cursor = cursor + found:getW()
+    
+            usePreviousSnap(true)
+    
+            if (found) then
+                lastFound = found
+                notFoundLoops = 0
+                notFoundLoops2 = 0
+                moveCursor = false
                 break
-            elseif (found) then
-                --found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0.01)
-                table.insert(found_alphabet, { v, found:getX() })
-                cursor = cursor + found:getW()
-                break
+            else
+                moveCursor = true
             end
         end
-
+        
+        highlightReg:highlightOff()
+        
+        
         --cursor = cursor + 25
-        tempRegion:highlightOff()
-        if (tmp_cursor == cursor) then
+        
+        if (moveCursor == true) then
             cursor_loop = cursor_loop + 1
         else
             cursor_loop = 0
         end
-
-        if (cursor_loop > 1) then
-            cursor = cursor + 25
+        
+        if (cursor_loop > 0) then
+            cursor = cursor + 1
+            notFoundLoops = notFoundLoops + 1
+            notFoundLoops2 = notFoundLoops2 + 1
         end
-
+        
+        if (notFoundLoops >= 6) then
+            table.insert(found_alphabet, { ' ', 0 })
+            firstChar = true
+            notFoundLoops = 0
+            --usePreviousSnap(false)
+        end
+        
+        if (notFoundLoops2 > 13) then
+            notFoundLoops2 = 0
+            break
+        end
+        
+        
+        
         tmp_cursor = cursor
-        tempRegion = Region(cursor, tempRegion:getY(), cursor_width, tempRegion:getH())
+        --tempRegion = Region(cursor, 448, cursor_width, 60)
     end
-
+    
+    usePreviousSnap(false)
     --[[for j, r in ipairs(found_alphabet) do
         --print(r[2])
         for k, s in ipairs(found_alphabet) do
@@ -312,13 +410,14 @@ function readCardName()
             end
         end
     end]] --
-
+    
     for i, v in ipairs(found_alphabet) do
         name = name .. v[1]
     end
-
-
+    
+    
     print(name)
+    Settings:set("MinSimilarity", 0.8)
 end
 
 --X
@@ -328,6 +427,6 @@ function tryDebug()
 end
 
 --tryDebug()
---readCardName()
-runBot()
+readCardName()
+--runBot()
 --getAtkDuel()
