@@ -12,4 +12,5 @@ What it does:
   - PvP
   - farming legendary duelists (at the gate)
 
-Automated duels are going to be implemented eventually (it's kinda complicated/slow).
+Automated duels are going to be implemented eventually.
+Currently working on the card reading method, it is still very slow.
