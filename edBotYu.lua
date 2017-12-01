@@ -17,7 +17,7 @@ dofile(scriptPath() .. "images.lua")
 
 setImmersiveMode(true)
 
-completeAlphabet = { { 'a', 'A', '36', '52' }, { 'b', 'B', '40', '50' }, { 'c', 'C', '30', '50' }, { 'd', 'D', '30', '40' }, { 'e', 'E', '32', '40' }, { 'f', 'F', '24', '46' }, { 'g', 'G', '40', '50' }, { 'h', 'H', '30', '50' }, { 'i', 'I', '12', '20' }, { 'j', 'J', '30', '50' }, { 'k', 'K', '40', '50' }, { 'l', 'L', '14', '40' }, { 'm', 'M', '44', '60' }, { 'n', 'N', '32', '50' }, { 'o', 'O', '32', '50' }, { 'p', 'P', '32', '36' }, { 'q', 'Q', '45', '50' }, { 'r', 'R', '20', '50' }, { 's', 'S', '35', '50' }, { 't', 'T', '20', '50' }, { 'u', 'U', '40', '50' }, { 'v', 'V', '32', '50' }, { 'w', 'W', '36', '52' }, { 'x', 'X', '40', '45' }, { 'y', 'Y', '40', '50' }, { 'z', 'Z', '40', '50' } }
+completeAlphabet = { { 'a', 'A', '36', '52' }, { 'b', 'B', '40', '50' }, { 'c', 'C', '30', '50' }, { 'd', 'D', '30', '40' }, { 'e', 'E', '32', '40' }, { 'f', 'F', '24', '46' }, { 'g', 'G', '30', '50' }, { 'h', 'H', '28', '42' }, { 'i', 'I', '14', '20' }, { 'j', 'J', '30', '50' }, { 'k', 'K', '40', '36' }, { 'l', 'L', '14', '40' }, { 'm', 'M', '44', '60' }, { 'n', 'N', '32', '50' }, { 'o', 'O', '32', '50' }, { 'p', 'P', '32', '36' }, { 'q', 'Q', '30', '30' }, { 'r', 'R', '20', '40' }, { 's', 'S', '35', '40' }, { 't', 'T', '20', '42' }, { 'u', 'U', '40', '50' }, { 'v', 'V', '32', '50' }, { 'w', 'W', '36', '52' }, { 'x', 'X', '40', '45' }, { 'y', 'Y', '32', '50' }, { 'z', 'Z', '40', '50' }, { 'minus', 'minus', '20', '20' } }
 
 function searchForDuelists()
     foundDuelists = listToTable(duelistWorldSmall_1_Region:findAllNoFindException(duelistWorldSmall_1))
@@ -231,6 +231,8 @@ function changeCursor(charackter)
                 return 0.7, tonumber(v[4])
             elseif (charackter == 'M') then
                 return 0.8, tonumber(v[4])
+            elseif (charackter == 'T') then
+                return 0.7, tonumber(v[4])
             end
             return 0.92, tonumber(v[4])
         elseif charackter == v[1] then
@@ -240,10 +242,10 @@ function changeCursor(charackter)
                 return 0.95, tonumber(v[3])
             elseif (charackter == 'a' or charackter == 'o' or charackter == 'y') then
                 return 0.9, tonumber(v[3])
-            elseif (charackter == 'd' or charackter == 'm' or charackter == 'w') then
+            elseif (charackter == 'i' or charackter == 'd' or charackter == 'm' or charackter == 'w') then
                 return 0.7, tonumber(v[3])
-            elseif (charackter == 'h' or charackter == 'i') then
-                return 0.85, tonumber(v[3])
+            elseif (charackter == 'h' or charackter == 'n') then
+                return 0.98, tonumber(v[3])
             end
             return 0.92, tonumber(v[3])
         end
@@ -252,8 +254,9 @@ end
 
 
 function readCardName()
+    local timer = Timer()
     Settings:set("MinSimilarity", 0.92)
-    local alphabet = { 'a', 'b', 'd', 'e', 'g', 'h', 'k', 'r', 'm', 'n', 'o', 'c', 'p', 'q', 's', 'u', 'y', 'v', 'w', 'x', 'z', 'f', 't', 'i', 'l', 'j' }
+    local alphabet = { 'a', 'b', 'd', 'e', 'g', 'h', 'k', 'r', 'm', 'n', 'o', 'c', 'p', 'q', 's', 'u', 'y', 'v', 'w', 'x', 'z', 'f', 't', 'i', 'l', 'j', 'minus' }
     --local alphabet = { 'a', 'c', 'e', 'l', 'u', 't' }
     --local alphabet = { 'a', 'b', 'c', 'd', 'e', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'r', 't', 's', 'u', 'v', 'w', 'x', 'z' } --without i f j l
     local name = "-- "
@@ -269,10 +272,10 @@ function readCardName()
     local moveCursor = false
     usePreviousSnap(false)
     
-    local tempRegion = Region(cursor, 442, cursor_width, 70)
+    local tempRegion = Region(cursor, 442, cursor_width, 76)
     local firstChar = true
     
-    while (cursor <= 500) do
+    while (cursor <= 600) do
         local highlightReg = tempRegion
         highlightReg:highlight()
         
@@ -284,7 +287,7 @@ function readCardName()
     
             Settings:set("MinSimilarity", sim)
             sim, cursor_width = changeCursor(alphabet[i])
-            tempRegion = Region(cursor, 442, cursor_width, 70)
+            tempRegion = Region(cursor, 442, cursor_width, 76)
             --tempRegion:highlight()
     
             --[[else
@@ -308,18 +311,32 @@ function readCardName()
                         break
                     end
                     cursor = found:getX() + found:getW() - 4
-                end
-        
-                --[[elseif (found) then
-                    
-                    table.insert(found_alphabet, { v, found:getX() })
-                    if (lastFound and found:getX() == lastFound:getX()) then
-                        table.remove(found_alphabet, #found_alphabet)
+                else
+                    if (alphabet[i] == 'minus') then
+                        break
                     end
-                    cursor = cursor + cursor_width / 2]] --
+                    sim, cursor_width = changeCursor(string.upper(alphabet[i]))
+                    tempRegion = Region(cursor, 442, cursor_width, 76)
+                    found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0)
+                    usePreviousSnap(true)
+                    if (found) then
+                        firstChar = false
+                        --table.insert(found_alphabet, { ' ', 0 })
+                        table.insert(found_alphabet, { string.upper(v), found:getX() })
+                        if (lastFound and (found:getX() <= lastFound:getX() + 5 and found:getX() >= lastFound:getX() - 5)) then
+                            table.remove(found_alphabet, #found_alphabet)
+                            cursor = found:getX() + found:getW() - 4
+                            break
+                        end
+                        cursor = found:getX() + found:getW() - 4
+                    end
+                end
             elseif (firstChar == true) then
+                if (alphabet[i] == 'minus') then
+                    break
+                end
                 sim, cursor_width = changeCursor(string.upper(alphabet[i]))
-                tempRegion = Region(cursor, 442, cursor_width, 70)
+                tempRegion = Region(cursor, 442, cursor_width, 76)
                 found = tempRegion:exists("alphabetY/" .. alphabet[i] .. alphabet[i] .. ".png", 0)
                 usePreviousSnap(true)
                 if (found) then
@@ -334,6 +351,7 @@ function readCardName()
                     cursor = found:getX() + found:getW() - 4
                 else
                     sim, cursor_width = changeCursor(alphabet[i])
+                    tempRegion = Region(cursor, 442, cursor_width, 76)
                     found = tempRegion:exists("alphabetY/" .. alphabet[i] .. ".png", 0)
                     if (found) then
                         firstChar = false
@@ -364,8 +382,20 @@ function readCardName()
         
         highlightReg:highlightOff()
         
-        
         --cursor = cursor + 25
+        local countWhitePixels = 0
+        --[[for x = 1, 5 do
+            for y = 1, 5 do
+                local r, g, b = getColor(Location(10 + x, 30 + y))
+                if (r == 255 and g == 255 and b == 255) then
+                    countWhitePixels = countWhitePixels + 1
+                end
+            end
+        end]] --
+        
+        if (countWhitePixels > 5) then
+            print(countWhitePixels)
+        end
         
         if (moveCursor == true) then
             cursor_loop = cursor_loop + 1
@@ -379,14 +409,15 @@ function readCardName()
             notFoundLoops2 = notFoundLoops2 + 1
         end
         
-        if (notFoundLoops >= 6) then
+        if (notFoundLoops >= 3) then
             table.insert(found_alphabet, { ' ', 0 })
+            cursor = cursor + 5
             firstChar = true
             notFoundLoops = 0
             --usePreviousSnap(false)
         end
         
-        if (notFoundLoops2 > 13) then
+        if (notFoundLoops2 > 8) then
             notFoundLoops2 = 0
             break
         end
@@ -412,11 +443,15 @@ function readCardName()
     end]] --
     
     for i, v in ipairs(found_alphabet) do
-        name = name .. v[1]
+        if (v[1] == 'minus') then
+            name = name .. '-'
+        else
+            name = name .. v[1]
+        end
     end
     
     
-    print(name)
+    print(name .. "\n " .. timer:check())
     Settings:set("MinSimilarity", 0.8)
 end
 
