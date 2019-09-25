@@ -16,3 +16,4 @@ Automated duels are going to be implemented eventually.
 Currently working on the card reading method, it is still very slow.
 
 THIS PROJECT IS NO LONGER MAINTAINED. Feel free to continue this project.
+Switch to "working" branch for the working bot with the core functions (without card reading).
